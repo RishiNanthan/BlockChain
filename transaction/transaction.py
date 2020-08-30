@@ -5,7 +5,7 @@ class Transaction:
         self.inputs = inputs
         self.outputs = outputs
         self.timestamp = timestamp
-        self.transaction_id = transaction_id
+        self.transaction_id = transaction_id            # Hash of transaction
         self.description = description
 
     def get_transaction(self, transaction_id: str):
@@ -13,4 +13,8 @@ class Transaction:
             Fetches transaction from blockchain given transaction id
         """
         pass
+
+    def find_transaction_id(self):
+        pass
+
 
