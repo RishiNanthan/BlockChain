@@ -2,7 +2,7 @@ import sys
 import pathlib
 import hashlib
 import rsa
-from ..encoding import base58_decode, base58_encode, decode_public_key
+from ..encoding.encoding import base58_decode, base58_encode, decode_public_key
 
 
 class Script:
