@@ -8,11 +8,14 @@ class Transaction:
         self.transaction_id = transaction_id            # Hash of transaction
         self.description = description
 
-    def get_transaction(self, transaction_id: str):
+
+    @staticmethod
+    def get_transaction(transaction_id: str):
         """
             Fetches transaction from blockchain given transaction id
         """
-        pass
+        return Transaction()
+
 
     def find_transaction_id(self):
         pass

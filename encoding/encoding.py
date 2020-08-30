@@ -1,5 +1,5 @@
 
-import rsa
+from ecdsa import VerifyingKey as PublicKey, SECP256k1 as curve, SigningKey as PrivateKey
 
 
 base58_string = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
@@ -26,25 +26,34 @@ def base58_decode(encoded_string: str) -> str:
     return hex(number)[2: ]
 
 
-def encode_public_key(public_key: rsa.PublicKey) -> str:
+def encode_public_key(public_key: PublicKey) -> str:
     """
-        Converts PublicKey to Public Key String
+        PublicKey -> Base58 String
     """
-    n = hex(public_key.n)[2: ]
-    e = hex(public_key.e)[2: ]
-    
-    n = base58_encode(n)
-    e = base58_encode(e)
-
-    return f"{n}-{e}"
+    hex_key = public_key.to_string().hex()
+    return base58_encode(hex_key)
 
 
-def decode_public_key(public_key_string: str) -> rsa.PublicKey:
-    n, e = public_key_string.split("-")
-    n = base58_decode(n)
-    e = base58_decode(e)
+def decode_public_key(public_key_string: str) -> PublicKey:
+    """
+        Base58 String -> PublicKey
+    """
+    hex_key = bytes.fromhex(base58_decode(public_key_string))
+    return PublicKey.from_string(hex_key, curve=curve)
 
-    n = int(n, 16)
-    e = int(e, 16)
 
-    return rsa.PublicKey(n, e)
+def encode_private_key(private_key: PrivateKey) -> str:
+    """
+        PublicKey -> Base58 String
+    """
+    hex_key = private_key.to_string().hex()
+    return base58_encode(hex_key)
+
+
+def decode_private_key(private_key_string: str) -> PrivateKey:
+    """
+        Base58 String -> Private Key
+    """
+    hex_key = bytes.fromhex(base58_decode(private_key_string))
+    return PrivateKey.from_string(hex_key, curve=curve)
+
