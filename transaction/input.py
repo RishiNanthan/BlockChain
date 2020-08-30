@@ -35,4 +35,5 @@ class Input:
         return False
 
     def __str__(self):
+        return f"transaction_id: {self.transaction_id}, index: {self.index}, scriptSig: {self.script_signature}"
         
