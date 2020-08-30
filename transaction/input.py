@@ -26,7 +26,7 @@ class Input:
     def verify_script(self):
         transaction = Transaction.get_transaction(self.transaction_id)
 
-        locking_script = transaction.outputs[self.index].script_publickey_signature
+        locking_script = transaction.outputs[self.index].script_publickey
         script_string = self.script_signature + " " + locking_script
 
         script = Script(script_string, self.transaction_id)
