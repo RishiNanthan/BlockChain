@@ -7,6 +7,7 @@ class Output:
         self.value = value
         self.script_publickey = script_publickey        #  Locking Script
 
+
     def __str__(self):
         return f"index: {self.index}, value: {self.value}, scriptPubSig: {self.script_publickey}"
 

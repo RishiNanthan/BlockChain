@@ -1,7 +1,7 @@
 import sys
 import pathlib
 import hashlib
-import rsa
+from ecdsa import VerifyingKey as PublicKey, BadSignatureError
 from ..encoding.encoding import base58_decode, base58_encode, decode_public_key
 
 
@@ -85,8 +85,8 @@ class Script:
         signature = bytes.fromhex(signature)
         transaction_id = bytes.fromhex(transaction_id)
         try:
-            rsa.verify(transaction_id, signature, public_key)
+            public_key.verify(signature, transaction_id)
             return True
-        except rsa.VerificationError:
+        except BadSignatureError:
             return False
 

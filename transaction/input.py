@@ -17,6 +17,7 @@ For unlocking the LOCKING script is concatenated to the UNLOCKING script and ver
 
 
 class Input:
+    
     def __init__(self, transaction_id: str, index: int, script_signature: str):
         self.transaction_id = transaction_id
         self.index = index
@@ -33,6 +34,7 @@ class Input:
         if script.verify_script():
             return True
         return False
+
 
     def __str__(self):
         return f"transaction_id: {self.transaction_id}, index: {self.index}, scriptSig: {self.script_signature}"
