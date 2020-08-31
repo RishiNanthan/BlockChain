@@ -11,4 +11,13 @@ class Output:
     def __str__(self):
         return f"index: {self.index}, value: {self.value}, scriptPubSig: {self.script_publickey}"
 
+    def json_data(self):
+        data = {
+            "index": self.index,
+            "value": self.value,
+            "script_publickey": self.script_publickey,
+        }
+        
+        return data
+
     
