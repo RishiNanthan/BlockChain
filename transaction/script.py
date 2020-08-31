@@ -14,7 +14,7 @@ class Script:
 
     def verify_script(self):
         script_operations = self.script.split()
-        script_operations = [i.strip() for i in script_operations]
+        script_operations = [i.strip() for i in script_operations if i.strip() != ""]
         
         try:
             for operation in script_operations:
