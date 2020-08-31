@@ -10,37 +10,30 @@ class Script:
     def __init__(self, script: str, transaction_id: str):
         self.script = script
         self.transaction_id = transaction_id
+        self.stack = []
 
     def verify_script(self):
         script_operations = self.script.split()
         script_operations = [i.strip() for i in script_operations]
         
-        stack = []
         try:
             for operation in script_operations:
                 
                 if operation == "OP_DUP":
-                    stack.append(stack[-1])
+                    self.stack.append(self.stack[-1])
 
                 elif operation == "OP_HASH160":
-                    val = stack.pop(-1)
-                    out_hash = Script.op_hash160(val)
-                    stack.append(out_hash)
+                    self.op_hash160()
 
                 elif operation == "OP_EQUALVERIFY":
-                    val1 = stack.pop(-1)
-                    val2 = stack.pop(-1)
-                    if not Script.op_equalverify(val1, val2):
-                        return False
+                    self.op_equalverify()
 
                 elif operation == "OP_CHECKSIG":
-                    pubkey = stack.pop(-1)
-                    signature = stack.pop(-1)
-                    if not Script.op_checksig(pubkey, signature, self.transaction_id):
-                        return False
+                    self.op_checksig()
 
                 else:
-                    stack.append(operation)
+                    #  not an operation, it might be pubkey, signature, hash etc.
+                    self.stack.append(operation)
 
         except IndexError:
             return False
@@ -49,15 +42,17 @@ class Script:
             print(e)
             return False
 
-        if not len(stack):
+        if len(self.stack) == 1 and self.stack[0] == True:
             return True
+        return False
 
     
-    @staticmethod
-    def op_hash160(val: str):
+    def op_hash160(self):
         """
             op_hash160(val) = Base58_encode( RIPEMD160( SHA_256( Base58_decode( val ) ) ) )
         """
+        val = self.stack.pop(-1)
+
         val = base58_decode(val)
         val_decoded = bytes.fromhex(val)
         
@@ -70,23 +65,25 @@ class Script:
         ripemd_hash = ripemd160.hexdigest()
 
         out_decode = base58_encode(ripemd_hash)        
-        return out_decode
+        self.stack.append(out_decode)
 
-    @staticmethod
-    def op_equalverify(val1, val2):
+
+    def op_equalverify(self):
+        val1 = self.stack.pop(-1)
+        val2 = self.stack.pop(-1)
         if val1 == val2:
             return True
-        return False
+        raise Exception("Script Verification Error")
 
 
-    @staticmethod
-    def op_checksig(public_key: str, signature: str, transaction_id: str):
+    def op_checksig(self):
+        public_key = self.stack.pop(-1)
+        signature = self.stack.pop(-1)
+
         public_key = decode_public_key(public_key)
         signature = bytes.fromhex(signature)
-        transaction_id = bytes.fromhex(transaction_id)
-        try:
-            public_key.verify(signature, transaction_id)
-            return True
-        except BadSignatureError:
-            return False
+        transaction_id = bytes.fromhex(self.transaction_id)
+
+        public_key.verify(signature, transaction_id)
+        self.stack.append(True)
 
