@@ -39,3 +39,10 @@ class Input:
     def __str__(self):
         return f"transaction_id: {self.transaction_id}, index: {self.index}, scriptSig: {self.script_signature}"
         
+    def json_data(self):
+        data = {
+            "transaction_id": self.transaction_id,
+            "index": self.index,
+            "script_signtaure": self.script_signature,
+        }
+        return data
