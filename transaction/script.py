@@ -44,10 +44,16 @@ class Script:
                     self.op_equal()
 
                 elif operation == "OP_RIPEMD160":
+                    # Hash the top element of stack using ripemd160
                     self.op_ripemd160()
 
                 elif operation == "OP_SHA256":
+                    # Hash the top element of stack using sha256
                     self.op_sha256()
+
+                elif operation == "OP_HASH256":
+                    # Hash the top element of stack using sha256 twice
+                    self.op_hash256()
 
                 else:
                     #  not an operation, it might be pubkey, signature, hash etc.
@@ -87,7 +93,7 @@ class Script:
         
         sha256 = hashlib.sha256()
         sha256.update(val_decoded)
-        sha256_hash = sha256.digest()
+        sha256_hash = sha256.hexdigest()
 
         out_decode = base58_encode(sha256_hash)        
         self.stack.append(out_decode)
@@ -141,4 +147,23 @@ class Script:
 
         public_key.verify(signature, transaction_id)
         self.stack.append(True)
+
+
+    def op_hash256(self):
+        val = self.stack.pop(-1)
+
+        val = base58_decode(val)
+        val_decoded = bytes.fromhex(val)
+        
+        sha256 = hashlib.sha256()
+        sha256.update(val_decoded)
+        sha256_hash = sha256.digest()
+
+        sha256 = hashlib.sha256()
+        sha256.update(sha256_hash)
+        sha256_hash = sha256.hexdigest()
+
+        out_encode = base58_encode(sha256_hash)
+        self.stack.append(out_encode)
+
 
