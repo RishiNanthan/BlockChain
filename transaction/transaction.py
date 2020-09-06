@@ -1,7 +1,7 @@
 
 class Transaction:
 
-    def __init__(self, inputs: list=None, outputs: list=None, timestamp: str=None, transaction_id: str=None, description: str):
+    def __init__(self, inputs: list=None, outputs: list=None, timestamp: str=None, transaction_id: str=None,description: str=None):
         self.inputs = inputs
         self.outputs = outputs
         self.timestamp = timestamp
