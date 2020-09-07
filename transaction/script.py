@@ -1,5 +1,3 @@
-import sys
-import pathlib
 import hashlib
 from ecdsa import VerifyingKey as PublicKey, BadSignatureError
 from encoding.encoding import base58_decode, base58_encode, decode_public_key
@@ -12,7 +10,7 @@ class Script:
         self.transaction_id = transaction_id
         self.stack = []
 
-    def verify_script(self):
+    def verify_script(self) -> bool:
         script_operations = self.script.split()
         script_operations = [i.strip() for i in script_operations if i.strip() != ""]
         

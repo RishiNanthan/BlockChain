@@ -18,14 +18,17 @@ For unlocking the LOCKING script is concatenated to the UNLOCKING script and ver
 
 class Input:
     
-    def __init__(self, transaction_id: str, index: int, script_signature: str):
+    def __init__(self, transaction_id: str, index: int, value: float, script_signature: str):
         self.transaction_id = transaction_id
+        self.value = value
         self.index = index
         self.script_signature = script_signature                                 # unlocking script
         
         
-    def verify_script(self):
+    def verify_script(self) -> bool:
         transaction = Transaction.get_transaction(self.transaction_id)
+        if not transaction.inputs[self.index].value == self.value:
+            return False
 
         locking_script = transaction.outputs[self.index].script_publickey
         script_string = self.script_signature + " " + locking_script
@@ -36,13 +39,15 @@ class Input:
         return False
 
 
-    def __str__(self):
-        return f"transaction_id: {self.transaction_id}, index: {self.index}, scriptSig: {self.script_signature}"
+    def __str__(self) -> str:
+        return f"transaction_id: {self.transaction_id}, index: {self.index}, value: {self.value}, scriptSig: {self.script_signature}"
         
-    def json_data(self):
+        
+    def json_data(self) -> dict:
         data = {
             "transaction_id": self.transaction_id,
             "index": self.index,
+            "value": self.value,
             "script_signtaure": self.script_signature,
         }
         return data
