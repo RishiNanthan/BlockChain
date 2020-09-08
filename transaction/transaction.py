@@ -1,6 +1,7 @@
 import hashlib
 from ecdsa import VerifyingKey as PublicKey, BadSignatureError
 from ..encoding.encoding import decode_public_key
+from ..database.transactiondb import TransactionModel
 
 
 class Transaction:
@@ -22,7 +23,8 @@ class Transaction:
         """
             Fetches transaction from transaction database given transaction id
         """
-        return Transaction()
+        transaction = TransactionModel().get_transaction(transaction_id)
+        return transaction
 
 
     @staticmethod
@@ -30,7 +32,7 @@ class Transaction:
         """
             Inserts transaction to the transaction database
         """
-        return True
+        return TransactionModel().add_transaction(transaction=transaction)
 
 
     def find_transaction_id(self) -> str:
