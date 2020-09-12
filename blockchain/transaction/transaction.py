@@ -1,6 +1,5 @@
 import hashlib
-print(__name__)
-from ecdsa import VerifyingKey as PublicKey, BadSignatureError
+from ecdsa import BadSignatureError
 from ..encoding.encoding import decode_public_key
 from ..database.transactiondb import TransactionModel
 
@@ -19,7 +18,7 @@ class Transaction:
         self.description = description
 
     @staticmethod
-    def get_transaction(transaction_id: str) -> Transaction:
+    def get_transaction(transaction_id: str):
         """
             Fetches transaction from transaction database given transaction id
         """
@@ -27,7 +26,7 @@ class Transaction:
         return transaction
 
     @staticmethod
-    def add_transaction(transaction: Transaction) -> bool:
+    def add_transaction(transaction) -> bool:
         """
             Inserts transaction to the transaction database
         """
@@ -38,7 +37,7 @@ class Transaction:
             Hash of the details of entire transaction
         """
         assert self.outputs is not None and self.timestamp is not None and self.signature is not None \
-            and self.description is not None
+               and self.description is not None
         document = self.json_data()
         document.pop("transaction_id")
         document_str = str(document)

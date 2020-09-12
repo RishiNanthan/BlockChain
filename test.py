@@ -1,5 +1,4 @@
-import sys 
-from transaction.Input import Input 
-
-sample_transaction = Input("A245678BET", 3, 6, "guggj")
-print(sample_transaction)
+from blockchain.transaction.Input import Input
+from blockchain.transaction.output import Output
+from blockchain.transaction.transaction import Transaction
+from blockchain.transaction.script import Script
