@@ -1,4 +1,5 @@
 import hashlib
+print(__name__)
 from ecdsa import VerifyingKey as PublicKey, BadSignatureError
 from ..encoding.encoding import decode_public_key
 from ..database.transactiondb import TransactionModel
@@ -6,17 +7,16 @@ from ..database.transactiondb import TransactionModel
 
 class Transaction:
 
-    def __init__(self, publickey: str=None, inputs: list=None, outputs: list=None, timestamp: str=None, transaction_id: str=None, signature: str=None, \
-        description: str=None):
-        
+    def __init__(self, publickey: str = None, inputs: list = None, outputs: list = None, timestamp: str = None,
+                 transaction_id: str = None, signature: str = None, description: str = None):
+
         self.publickey = publickey
         self.inputs = inputs if inputs is not None else []
         self.outputs = outputs
         self.timestamp = timestamp
-        self.transaction_id = transaction_id            # Hash of transaction
-        self.signature = signature                      # signature of the hash of all details except transaction_id
+        self.transaction_id = transaction_id  # Hash of transaction
+        self.signature = signature  # signature of the hash of all details except transaction_id
         self.description = description
-
 
     @staticmethod
     def get_transaction(transaction_id: str) -> Transaction:
@@ -26,14 +26,12 @@ class Transaction:
         transaction = TransactionModel().get_transaction(transaction_id)
         return transaction
 
-
     @staticmethod
     def add_transaction(transaction: Transaction) -> bool:
         """
             Inserts transaction to the transaction database
         """
         return TransactionModel().add_transaction(transaction=transaction)
-
 
     def find_transaction_id(self) -> str:
         """
@@ -50,8 +48,7 @@ class Transaction:
         transaction_id = sha256.hexdigest()
 
         self.transaction_id = transaction_id
-        return transaction_id        
-
+        return transaction_id
 
     def get_signing_message_hash(self) -> str:
         document = self.json_data()
@@ -65,19 +62,17 @@ class Transaction:
 
         return message_hash
 
-
-    def json_data(self)  -> dict:
+    def json_data(self) -> dict:
         document = {
             "publickey": self.publickey,
-            "inputs": [ i.json_data() for i in self.inputs ],
-            "outputs": [ i.json_data() for i in self.outputs ],
+            "inputs": [i.json_data() for i in self.inputs],
+            "outputs": [i.json_data() for i in self.outputs],
             "description": self.description,
             "timestamp": self.timestamp,
             "signature": self.signature,
             "transaction_id": self.transaction_id,
         }
         return document
-
 
     def verify_signature(self) -> bool:
         pubkey = decode_public_key(self.publickey)
@@ -94,9 +89,8 @@ class Transaction:
 
         return False
 
-
     def verify_transaction(self) -> bool:
-        
+
         for i in self.inputs:
             if not i.verify_script():
                 return False
@@ -106,13 +100,11 @@ class Transaction:
             return False
         return self.verify_signature()
 
-
     def get_total_input_value(self) -> float:
         total_input = 0
         for i in self.inputs:
             total_input += i.value
         return total_input
-
 
     def get_total_output_value(self) -> float:
         total_output = 0
