@@ -22,8 +22,8 @@ class Transaction:
         """
             Fetches transaction from transaction database given transaction id
         """
-        transaction = TransactionModel().get_transaction(transaction_id)
-        return transaction
+        transaction_data = TransactionModel().get_transaction(transaction_id)
+        return transaction_data
 
     @staticmethod
     def add_transaction(transaction) -> bool:

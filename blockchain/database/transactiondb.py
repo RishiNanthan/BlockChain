@@ -4,6 +4,33 @@ SERVER = "mongodb://localhost:27017"
 DATABASE_NAME = "BlockChain_DB"
 COLLECTION_NAME = "Transaction"
 
+"""
+                TRANSACTION DOCUMENT STRUCTURE
+
+                {
+                    transaction_id: str,
+                    public_key: str,
+                    signature: str,
+                    description: str,
+                    timestamp: str,
+                    inputs: [
+                        {
+                            transaction_id: str,
+                            index: int,
+                            value: float,
+                            script_signature: str,
+                        },
+                    ],
+                    outputs: [
+                        {
+                            index: int,
+                            value: float,
+                            script_publickey: str,
+                        },
+                    ],
+                }
+
+"""
 
 class TransactionModel:
 
