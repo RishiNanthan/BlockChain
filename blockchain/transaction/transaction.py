@@ -6,6 +6,7 @@ from ..database.transactiondb import TransactionModel
 
 class Transaction:
 
+
     def __init__(self, publickey: str = None, inputs: list = None, outputs: list = None, timestamp: str = None,
                  transaction_id: str = None, signature: str = None, description: str = None):
 
@@ -17,13 +18,21 @@ class Transaction:
         self.signature = signature  # signature of the hash of all details except transaction_id
         self.description = description
 
-    @staticmethod
-    def get_transaction(transaction_id: str):
+    
+    def get_transaction(self, transaction_id: str):
         """
             Fetches transaction from transaction database given transaction id
         """
         transaction_data = TransactionModel().get_transaction(transaction_id)
-        return transaction_data
+        self.publickey = transaction_data["public_key"]
+        self.inputs = transaction_data["inputs"]
+        self.outputs = transaction_data["outputs"]
+        self.timestamp = transaction_data["timestamp"]
+        self.transaction_id = transaction_data["transaction_id"]
+        self.signature = transaction_data["signature"]
+        self.description = transaction_data["description"]
+        return self
+
 
     @staticmethod
     def add_transaction(transaction) -> bool:
@@ -31,6 +40,7 @@ class Transaction:
             Inserts transaction to the transaction database
         """
         return TransactionModel().add_transaction(transaction=transaction)
+
 
     def find_transaction_id(self) -> str:
         """
@@ -49,6 +59,7 @@ class Transaction:
         self.transaction_id = transaction_id
         return transaction_id
 
+
     def get_signing_message_hash(self) -> str:
         document = self.json_data()
         document.pop("signature")
@@ -61,6 +72,7 @@ class Transaction:
 
         return message_hash
 
+
     def json_data(self) -> dict:
         document = {
             "publickey": self.publickey,
@@ -72,6 +84,7 @@ class Transaction:
             "transaction_id": self.transaction_id,
         }
         return document
+
 
     def verify_signature(self) -> bool:
         pubkey = decode_public_key(self.publickey)
@@ -88,6 +101,7 @@ class Transaction:
 
         return False
 
+
     def verify_transaction(self) -> bool:
 
         for i in self.inputs:
@@ -99,14 +113,25 @@ class Transaction:
             return False
         return self.verify_signature()
 
+
     def get_total_input_value(self) -> float:
         total_input = 0
         for i in self.inputs:
             total_input += i.value
         return total_input
 
+
     def get_total_output_value(self) -> float:
         total_output = 0
         for i in self.outputs:
             total_output += i.value
         return total_output
+
+
+    def __repr__(self):
+        return str(self.transaction_id)
+
+
+    def __str__(self):
+        return str(self.transaction_id)
+
