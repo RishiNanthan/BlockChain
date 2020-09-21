@@ -25,6 +25,7 @@ class Block:
 
 
     def find_hash(self) -> str:
+        # returns hash without encoding -change if it doesnt feel good
         document = self.json_data()
         document.pop("block_id")
         document_string = str(document)
@@ -32,12 +33,16 @@ class Block:
         hash_fun = sha256()
         hash_fun.update(document_string)
         hash_string = hash_fun.hexdigest()
+        return hash_string
 
+    def find_block_id(self) -> str:
+        hash_string = find_hash()
         return base58_encode(hash_string) 
 
 
     def verify_block(self) -> bool:
-        if not self.verify_proof_of_work() or self.find_hash() != self.block_id:
+        block_hash = self.base58_decode(self.block_id)
+        if not self.verify_proof_of_work(block_hash) or self.find_block_id() != self.block_id:
             return False
         
         for transaction in self.transactions:
@@ -47,8 +52,8 @@ class Block:
         return True
         
 
-    def verify_proof_of_work(self):
-        block_hash = base58_decode(self.block_id)
+    def verify_proof_of_work(self, block_hash):
+        
         block_id_number = int.from_bytes(bytes.fromhex(block_hash), "big")
         if block_id_number <= self.difficulty:
             return True
@@ -60,10 +65,10 @@ class Block:
                 Miners can replace this function so that they may compute nonce in reliable manner
         """
         self.nonce = 0
-        self.find_hash()
-        while not self.verify_proof_of_work():
+        block_hash = self.find_hash()
+        while not self.verify_proof_of_work(block_hash):
             self.nonce += 1
-            self.find_hash()
+            block_hash = self.find_hash()
         return self.nonce
 
 
@@ -73,6 +78,7 @@ class Block:
             "version": self.version,
             "previous_block": self.previous_block,
             "timestamp": self.timestamp,
+            "difficulty": self.difficulty,
             "nonce": self.nonce,
             "transactions": self.transactions,
         }
