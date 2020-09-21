@@ -12,14 +12,16 @@ Nonce-A counter used for the proof-of-work algorithm
 class BlockHeader:
 	
 
-	def __init__(self, version: str, previous_block: str,  timestamp: str,
-		difficulty: float, nonce: int, transactions: list):
-			self.version = version
-			self.previous_block = previous_block
-			self.merkleroot = self.compute_merkleroot(transactions)
-			self.timestamp = timestamp,
-			self.difficulty = difficulty
-			self.nonce = nonce
+	def __init__(self, block ):
+			assert(block != None)
+			document = block.json_data()
+			self.version = document.get("version")
+			self.previous_block = document.get("previous_block")
+			self.transactions = document.get("transactions")
+			self.merkleroot = self.compute_merkleroot(self.transactions)
+			self.timestamp = document.get("timestamp")
+			self.difficulty = document.get("difficulty")
+			self.nonce = document.get("nonce")
 
 
 	def json_data(self) -> dict:
