@@ -11,35 +11,36 @@ Nonce-A counter used for the proof-of-work algorithm
 
 class BlockHeader:
 	
-	def __init__(self, version: str, previousblockhash: str,  timestamp: str,
-		difficulty: float,nonce: int, transactionlist: list):
+
+	def __init__(self, version: str, previous_block: str,  timestamp: str,
+		difficulty: float, nonce: int, transactions: list):
 			self.version = version
-			self.previousblockhash = previousblockhash
-			self.merkleroot = self.compute_merkleroot(transactionlist)
+			self.previous_block = previous_block
+			self.merkleroot = self.compute_merkleroot(transactions)
 			self.timestamp = timestamp,
 			self.difficulty = difficulty
 			self.nonce = nonce
 
-	def __str__(self) -> str:
-		return f'''version: {self.version},previousblockhash: {self.previousblockhash},merkleroot: {self.merkleroot},timestamp: {self.timestamp},difficulty: {self.difficulty},nonce: {self.nonce}'''
 
 	def json_data(self) -> dict:
 		data = {
-			"version":self.version,previousblockhash:self.previousblockhash,
+			"version":self.version,previous_block:self.previous_block,
 			"merkleroot":self.merkleroot,
 			"timestamp":{self.timestamp},
 			"difficulty":{self.difficulty},
 			"nonce":{self.nonce}
 		}
 
+
 	def little(self,string):
 		t= bytearray.fromhex(string)
 		t.reverse()
 		return ''.join(format(x,'02x') for x in t)
+	
 
-	def compute_merkleroot(self, transactionlist: list) -> str:
+	def compute_merkleroot(self, transactions: list) -> str:
 		merkleroot = ""
-		merklelist = transactionlist.copy()
+		merklelist = transactions.copy()
 		newmerklelist = []
 		if(len(merklelist) == 0):
 			#should raise exception
@@ -61,3 +62,8 @@ class BlockHeader:
 			merkleroot = self.little(merklelist[0])
             
 		return merkleroot
+
+
+	def __str__(self) -> str:
+		return str(self.json_data())
+
