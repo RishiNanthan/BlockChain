@@ -57,6 +57,6 @@ class BlockModel:
         return query_result.acknowledged
 
     def get_block(self, block_id: str) -> dict:
-        query_result = self.collection.find_one({ "block_id": block_id }, { "id": 0 })
+        query_result = self.collection.find_one({ "block_id": block_id }, { "_id": 0 })
         return query_result
         
