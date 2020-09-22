@@ -37,10 +37,6 @@ class Input:
         if script.verify_script():
             return True
         return False
-
-
-    def __str__(self) -> str:
-        return f"transaction_id: {self.transaction_id}, index: {self.index}, value: {self.value}, scriptSig: {self.script_signature}"
         
         
     def json_data(self) -> dict:
@@ -51,3 +47,14 @@ class Input:
             "script_signtaure": self.script_signature,
         }
         return data
+
+
+    def from_json(self, input_document: dict):
+        self.transaction_id = input_document['transaction_id']
+        self.index = input_document['index']
+        self.value = input_document['value']
+        self.script_signature = input_document['script_ssignature']
+        
+
+    def __str__(self) -> str:
+        return f"transaction_id: {self.transaction_id}, index: {self.index}, value: {self.value}, scriptSig: {self.script_signature}"

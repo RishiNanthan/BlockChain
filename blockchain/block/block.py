@@ -22,6 +22,8 @@ class Block:
         self.timestamp = timestamp
         self.nonce = nonce
         self.transactions = transactions
+        self.__version = self.version
+        self.__difficulty = self.difficulty
 
 
     def find_hash(self) -> str:
@@ -34,6 +36,7 @@ class Block:
         hash_fun.update(document_string)
         hash_string = hash_fun.hexdigest()
         return hash_string
+
 
     def find_block_id(self) -> str:
         hash_string = find_hash()
@@ -83,6 +86,16 @@ class Block:
             "transactions": self.transactions,
         }
         return document
+
+
+    def from_json(self, block_document: dict):
+        self.block_id = block_document['block_id']
+        self.__version = block_document['version']
+        self.previous_block = block_document['previous_block']
+        self.timestamp = block_document['timestamp']
+        self.__difficulty = block_document['difficulty']
+        self.nonce = block_document['nonce']
+        self.transactions = [ Transaction().from_json(doc) for doc in block_document['transactions'] ]
 
 
     def __str__(self):
