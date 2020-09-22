@@ -3,8 +3,8 @@ from ..transaction.transaction import Transaction
 from hashlib import sha256
 
 
-HASH_DIFFICULTY = None                #  Proof of Work
-VERSION = None                        #  Version of the Software
+HASH_DIFFICULTY = None                #  Proof of Work    INTEGER
+VERSION = None                        #  Version of the Software  INTEGER
 
 
 class Block:

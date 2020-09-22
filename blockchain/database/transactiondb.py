@@ -20,6 +20,7 @@ COLLECTION_NAME = "Transaction"
                             value: float,
                             script_signature: str,
                         },
+                        ....
                     ],
                     outputs: [
                         {
@@ -27,6 +28,7 @@ COLLECTION_NAME = "Transaction"
                             value: float,
                             script_publickey: str,
                         },
+                        ....
                     ],
                 }
 
@@ -52,3 +54,4 @@ class TransactionModel:
     def get_transaction(self, transaction_id: str):
         transaction = self.collection.find_one({"transaction_id": transaction_id})
         return transaction
+
