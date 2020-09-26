@@ -4,6 +4,7 @@ from ..encoding.encoding import decode_public_key
 from ..database.transactiondb import TransactionModel
 from .Input import Input
 from .output import Output
+from ..database.unspent_transactiondb import UnspentTransactionModel
 
 class Transaction:
 
@@ -41,6 +42,20 @@ class Transaction:
             Inserts transaction to the transaction database
         """
         return TransactionModel().add_transaction(transaction=transaction)
+
+
+    def is_unspent(self) -> bool:
+        """
+            Checks whether the transaction is unspent
+
+            Returns:
+                bool    
+        """
+        
+        for inp in self.inputs:
+            if UnspentTransactionModel().is_spent(inp):
+                return False
+        return True
 
 
     def find_transaction_id(self) -> str:
@@ -97,7 +112,7 @@ class Transaction:
                 return False
 
         transaction_id = self.transaction_id
-        if not self.find_transaction_id == transaction_id:
+        if not self.find_transaction_id() == transaction_id:
             return False
         return self.verify_signature()
 

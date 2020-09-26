@@ -6,6 +6,7 @@ from .database.blockdb import BlockModel
 from .database.transactiondb import TransactionModel
 from .database.unspent_transactiondb import UnspentTransactionModel
 
+import time
 
 
 class BlockChain:
@@ -21,6 +22,8 @@ class BlockChain:
         self.block_model = BlockModel()
         self.transaction_model = TransactionModel()
         self.unspent_transaction_model = UnspentTransactionModel()
+
+        self.transaction_pool = []
         
 
     def add_block(self, block_data: dict):
@@ -103,12 +106,39 @@ class BlockChain:
         return transaction
 
 
-    def mine_block(self, mining_function=None):
-        new_block = Block
+    def mine_block(self, mining_function=None, transaction_count=10):
+        """
+            Creates a block using transactions from transaction_pool, returns None incase of failure
+
+            Parameters:
+                mining_function: Function  // in case you need more efficient algorithm
+                transaction_count: int     // transactions per block
+
+            Returns:
+                str    // Block_Hash
+  
+        """
+
+        new_block = Block()
         if mining_function is not None:
             new_block.find_nonce = mining_function
 
-        pass
+        while len(new_block.transactions) < transaction_count:
+            if not len(self.transaction_pool):
+                print("Waiting 5 seconds for new transactions to create block ... ")
+                time.sleep(5)
+                continue
+
+            transaction = self.transaction_pool.pop(0)
+            new_block.transactions += [transaction]
+
+        nonce = new_block.find_nonce()
+        block_hash = new_block.find_hash()
+
+        if self.add_block(new_block.json_data()):
+            print(f" Block [{ block_hash }] Created ...")
+            return block_hash
+
+        print(" Block creation Failed ...")
+        return None
         
-
-
