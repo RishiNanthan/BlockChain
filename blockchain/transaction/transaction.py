@@ -6,8 +6,22 @@ from .Input import Input
 from .output import Output
 from ..database.unspent_transactiondb import UnspentTransactionModel
 
-class Transaction:
 
+def verify_script(inp: Input) -> bool:
+    transaction = Transaction.get_transaction(inp.transaction_id)
+    if not transaction.inputs[inp.index].value == inp.value:
+        return False
+
+    locking_script = transaction.outputs[inp.index].script_publickey
+    script_string = inp.script_signature + " " + locking_script
+
+    script = Script(script_string, inp.transaction_id)
+    if script.verify_script():
+        return True
+    return False
+
+
+class Transaction:
 
     def __init__(self, publickey: str = None, inputs: list = None, outputs: list = None, timestamp: str = None,
                  transaction_id: str = None, signature: str = None, description: str = None):
@@ -108,7 +122,7 @@ class Transaction:
     def verify_transaction(self) -> bool:
 
         for i in self.inputs:
-            if not i.verify_script():
+            if not verify_script(inp):
                 return False
 
         transaction_id = self.transaction_id

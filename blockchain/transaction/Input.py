@@ -1,5 +1,4 @@
 import base64
-from .transaction import Transaction
 from .script import Script
 
 """
@@ -23,20 +22,6 @@ class Input:
         self.value = value
         self.index = index
         self.script_signature = script_signature                                 # unlocking script
-        
-        
-    def verify_script(self) -> bool:
-        transaction = Transaction.get_transaction(self.transaction_id)
-        if not transaction.inputs[self.index].value == self.value:
-            return False
-
-        locking_script = transaction.outputs[self.index].script_publickey
-        script_string = self.script_signature + " " + locking_script
-
-        script = Script(script_string, self.transaction_id)
-        if script.verify_script():
-            return True
-        return False
         
         
     def json_data(self) -> dict:

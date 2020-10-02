@@ -1,11 +1,14 @@
+# Classes
 from .block.block import Block
 from .transaction.transaction import Transaction
 
+# Database Models
 from .database.blockchaindb import BlockChainModel
 from .database.blockdb import BlockModel
 from .database.transactiondb import TransactionModel
 from .database.unspent_transactiondb import UnspentTransactionModel
 
+# Other Libraries
 import time
 
 
@@ -24,11 +27,52 @@ class BlockChain:
         self.unspent_transaction_model = UnspentTransactionModel()
 
         self.transaction_pool = []
+        self.block_pool = []
+
+    
+    def add_block_pool(self, block_data: dict):
+        """
+            Adds the block to the block_pool
+
+            Parameters:
+                block_data: dict
+
+            Returns:
+                bool
+        """
+
+        block = Block()
+        block.from_json(block_data)
+        if block.verify_block():
+            self.block_pool += [block]
+            self.store_block(block_data)
+            return True
+        return False
+
+
+    def add_transaction_pool(self, transaction_data: dict):
+        """
+            Adds the transaction to the transaction pool
+
+            Parameters:
+                transaction_data: dict
+
+            Returns:
+                bool
+        """
+
+        transaction = Transaction()
+        transaction.from_json(transaction_data)
+        if transaction.verify_transaction():
+            self.transaction_pool += [transaction]
+            self.store_transaction(transaction_data)
+            return True
+        return False
         
 
-    def add_block(self, block_data: dict):
+    def store_block(self, block_data: dict):
         """
-            Adds the block to the database. If already found or not valid block, returns False
+            Stores the block to the database. If already found or not valid block, returns False
 
             Parameters:
                 block_data: dict
@@ -46,9 +90,9 @@ class BlockChain:
             return False
 
 
-    def add_transaction(self, transaction_data: dict):
+    def store_transaction(self, transaction_data: dict):
         """
-            Adds the transaction to the database. If already found or not valid transaction, returns False
+            Stores the transaction to the database. If already found or not valid transaction, returns False
 
             Parameters:
                 transaction_data: dict
