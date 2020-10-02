@@ -123,11 +123,12 @@ class BlockChain:
         """
 
         block = Block()
-        block_data = self.get_block(block_id)
+        block_data = self.block_model.get_block(block_id)
         if block_data is None:
             return None
         block.from_json(block_data)
         return block
+
 
     def get_transaction(self, transaction_id: str):
         """
