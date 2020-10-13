@@ -76,4 +76,6 @@ def add_node():
 
 
 def run_app(debug=True):
+    IP = input("Enter IP Address: ")
+    PORT = int(input("Enter PORT Number: "))
     app.run(IP, PORT, debug=debug)
