@@ -1,24 +1,39 @@
 
 from blockchain.blockchain import BlockChain
-import blockchain_server
 import blockchain_client
+import blockchain_server
 
 
-class Initialiser:
-    def __init__(self, ip: str, port: int):
-        self.IP = ip
-        self.PORT = port
-
-        self.CONNECTED_NODES = set()
-        self.TRANSACTION_INVITES = {}
-        self.BLOCK_INVITES = {}
-
-        self.BLOCK_CHAIN = BlockChain()
+IP = None
+PORT = None
+CONNECTED_NODES = []        # list of addresses
+BLOCKCHAIN = BlockChain()
+BLOCK_INVITES = []          # list of {"block_id": block_id, "ip_address": ip_address}
+TRANSACTION_INVITES = []    # list of {"transaction_id": transaction_id, "ip_address": ip_address}
 
 
-CONSTANTS = Initialiser("127.0.0.1", 8000)
-blockchain_server.CONSTANTS = CONSTANTS
-blockchain_client.CONSTANTS = CONSTANTS
+def initialise():
+    print("hi")
+    global IP, PORT, CONNECTED_NODES, BLOCKCHAIN, BLOCK_INVITES, TRANSACTION_INVITES
+
+    blockchain_client.IP = IP
+    blockchain_client.PORT = PORT
+    blockchain_client.CONNECTED_NODES = CONNECTED_NODES
+    blockchain_client.BLOCKCHAIN = BLOCKCHAIN
+    blockchain_client.BLOCK_INVITES = BLOCK_INVITES
+    blockchain_client.TRANSACTION_INVITES = TRANSACTION_INVITES
+
+    blockchain_server.IP = IP
+    blockchain_server.PORT = PORT
+    blockchain_server.CONNECTED_NODES = CONNECTED_NODES
+    blockchain_server.BLOCKCHAIN = BLOCKCHAIN
+    blockchain_server.BLOCK_INVITES = BLOCK_INVITES
+    blockchain_server.TRANSACTION_INVITES = TRANSACTION_INVITES
 
 
-blockchain_server.run_app()
+if __name__ == '__main__':
+
+    initialise()
+
+    blockchain_client.run_client()
+    blockchain_server.run_server()
