@@ -67,4 +67,7 @@ class BlockChain_Client:
 
                     
 def run_client():
-    pass
+    client = BlockChain_Client()
+    threading.Thread(target=client.get_invited_transaction).start()
+    threading.Thread(target=client.get_invited_block).start()
+

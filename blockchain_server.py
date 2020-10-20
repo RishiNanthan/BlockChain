@@ -76,9 +76,9 @@ def create_transaction():
 @app.route('/add_node')
 def add_node():
     address = request.args.get('ip_address')
-    CONNECTED_NODES.push(address)
+    CONNECTED_NODES.append(address)
     return jsonify(ACK_MSG)
 
 
-def run_server(debug=True):
-    app.run(IP, PORT, debug=debug)
+def run_server():
+    app.run(IP, PORT, debug=False)

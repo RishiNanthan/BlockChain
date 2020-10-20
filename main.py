@@ -13,8 +13,10 @@ TRANSACTION_INVITES = []    # list of {"transaction_id": transaction_id, "ip_add
 
 
 def initialise():
-    print("hi")
     global IP, PORT, CONNECTED_NODES, BLOCKCHAIN, BLOCK_INVITES, TRANSACTION_INVITES
+
+    IP = input("Enter IP address: ")
+    PORT = int(input("Enter PORT number: "))
 
     blockchain_client.IP = IP
     blockchain_client.PORT = PORT
@@ -37,3 +39,4 @@ if __name__ == '__main__':
 
     blockchain_client.run_client()
     blockchain_server.run_server()
+    
