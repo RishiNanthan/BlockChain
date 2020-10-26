@@ -37,6 +37,6 @@ if __name__ == '__main__':
 
     initialise()
 
-    blockchain_client.run_client()
+    blockchain_client.run_client(mining=True)
     blockchain_server.run_server()
     

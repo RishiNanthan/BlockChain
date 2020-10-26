@@ -65,8 +65,11 @@ class BlockChain_Client:
                     continue
 
 
+    def start_mining(self):
+        pass
+
                     
-def run_client():
+def run_client(mining=True):
     client = BlockChain_Client()
     threading.Thread(target=client.get_invited_transaction).start()
     threading.Thread(target=client.get_invited_block).start()
