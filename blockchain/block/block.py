@@ -21,7 +21,7 @@ class Block:
         self.previous_block = previous_block
         self.timestamp = timestamp
         self.nonce = nonce
-        self.transactions = transactions
+        self.transactions = transactions if transactions is not None else []
         self.__version = self.version
         self.__difficulty = self.difficulty
 

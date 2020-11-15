@@ -30,7 +30,7 @@ class BlockChain:
         self.block_pool = []
 
     
-    def add_block_pool(self, block_data: dict):
+    def add_block_pool(self, block_data: dict) -> bool:
         """
             Adds the block to the block_pool
 
@@ -50,7 +50,7 @@ class BlockChain:
         return False
 
 
-    def add_transaction_pool(self, transaction_data: dict):
+    def add_transaction_pool(self, transaction_data: dict) -> bool:
         """
             Adds the transaction to the transaction pool
 
@@ -70,7 +70,7 @@ class BlockChain:
         return False
         
 
-    def store_block(self, block_data: dict):
+    def store_block(self, block_data: dict) -> Block:
         """
             Stores the block to the database. If already found or not valid block, returns False
 
@@ -90,7 +90,7 @@ class BlockChain:
             return False
 
 
-    def store_transaction(self, transaction_data: dict):
+    def store_transaction(self, transaction_data: dict) -> Transaction:
         """
             Stores the transaction to the database. If already found or not valid transaction, returns False
 
@@ -180,7 +180,7 @@ class BlockChain:
         nonce = new_block.find_nonce()
         block_hash = new_block.find_hash()
 
-        if self.add_block(new_block.json_data()):
+        if self.add_block_pool(new_block.json_data()):
             print(f" Block [{ block_hash }] Created ...")
             return block_hash
 

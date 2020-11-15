@@ -1,0 +1,50 @@
+
+
+class BlockChain
+
+    Instance variables
+
+        - blockchain_model : object that is responsible for handling blockchain database
+
+        - block_model : object that is responsible for handling block database
+
+        - transaction_model: object that is responsible for handling transaction database
+
+        - unspent_transaction_model: object that is responsible for handling unspent transactions database
+
+        - transaction_pool: list of unrecorded transactions in blockchain, stored in memory
+
+        - block_pool: list of unrecorded blocks in blockchain, stored in memory
+
+
+    Methods
+
+        - add_block_pool(block_data: dict):
+            verifies the block data, stores in the block database, and adds the block to the block_pool list
+            returns true/false/exception
+
+        - add_transaction_pool(transaction_data: dict):
+            verifies the transaction data, stores in transaction database, and adds transaction to the transaction_pool list
+            returns true/false/exception
+
+        - store_block(block_data: dict):
+            verifies the block data and stores in block database
+            returns true/false/exception
+
+        - store_transaction(transaction_data: dict):
+            verifies the transaction data and stores in transaction database
+            returns true/false/exception
+
+        - get_block(block_id: str):
+            gets the block from database if present
+            returns block ( Block obj ) / None
+
+        - get_transaction(transaction_id: str):
+            gets the transaction from database if present
+            returns transaction ( Transction obj ) / None
+
+        - mine_block(mining_function: function, transaction_count):
+            Creates a block using transactions from transaction_pool, returns None incase of failure
+            The created block is stored in block database and added to block_pool list
+            returns block_hash ( str ) / None
+
