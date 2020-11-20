@@ -1,6 +1,6 @@
 
 from blockchain.blockchain import BlockChain
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template, url_for
 
 
 IP = None
@@ -21,11 +21,14 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
+    """
     data = {
         "IP_ADDRESS": f"{ IP }:{ PORT }",
         "CONNECTED_NODES": CONNECTED_NODES,
     }
     return jsonify(data)
+    """
+    return render_template("index.html")
 
 
 @app.route('/connect')
