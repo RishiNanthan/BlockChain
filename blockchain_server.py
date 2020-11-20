@@ -28,6 +28,13 @@ def index():
     return jsonify(data)
 
 
+@app.route('/connect')
+def connect():
+    ip = request.args.get("ip_address")
+    CONNECTED_NODES.append(ip)
+    return jsonify(ACK_MSG)
+
+
 @app.route('/invite_for_block')
 def invite_for_block():
     block_id = request.args.get("block_id")
@@ -73,11 +80,15 @@ def create_transaction():
     return jsonify({})
 
 
-@app.route('/add_node')
-def add_node():
-    address = request.args.get('ip_address')
-    CONNECTED_NODES.append(address)
-    return jsonify(ACK_MSG)
+@app.route("/create_address") 
+def create_address():
+    public_key, private_key = BlockChain.generate_keys()
+    data = {
+        "public_key": public_key,
+        "private_key": private_key,
+    }
+    return jsonify(data)
+
 
 
 def run_server():

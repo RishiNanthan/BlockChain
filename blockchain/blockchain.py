@@ -1,6 +1,7 @@
 # Classes
 from .block.block import Block
 from .transaction.transaction import Transaction
+from .address import address
 
 # Database Models
 from .database.blockchaindb import BlockChainModel
@@ -29,7 +30,19 @@ class BlockChain:
         self.transaction_pool = []
         self.block_pool = []
 
+
+    @staticmethod
+    def generate_keys() -> tuple:
+        """
+            Generates new private_key, public_key pair
+
+            Returns:
+            (public_key, private_key)
+
+        """
+        return address.generate_keys()
     
+
     def add_block_pool(self, block_data: dict) -> bool:
         """
             Adds the block to the block_pool
