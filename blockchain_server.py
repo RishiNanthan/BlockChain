@@ -2,6 +2,8 @@
 from blockchain.blockchain import BlockChain
 from flask import Flask, jsonify, request, render_template, url_for
 
+import random
+
 
 IP = None
 PORT = None
@@ -17,7 +19,7 @@ ACK_MSG = {
 
 
 app = Flask(__name__)
-
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 
 @app.route('/')
 def index():
@@ -78,8 +80,9 @@ def get_next_block():
     return jsonify({})
 
 
-@app.route('/create_transaction')                     #   To be completed
+@app.route('/create_transaction', methods=["POST"])                     #   To be completed
 def create_transaction():
+    print(request.get_data())
     return jsonify({})
 
 
@@ -95,8 +98,30 @@ def create_address():
 
 @app.route("/get_client_transactions")                 # To be completed
 def get_client_transactions():
+    transaction = {
+        "transaction_id": "fgdjAGFUGu" + str(random.randrange(5000)),
+        "description": "Hello World",
+        "public_key": "dgyZGGuf",
+        "signature": "fgvujAGFU",
+        "timestamp": "17-01-2000 12:00:00",
+        "inputs": [
+            {
+                "previous_transaction": "gfkbgbghg",
+                "index": 0,
+                "value": random.randrange(0, 500),
+                "script": "OP_CHKSIG SIG",
+            }
+        ],
+        "outputs": [
+            {
+                "value": 4.5,
+                "script": "OP_CHKSIG",
+            },
+        ],
+    }
+
     data = {
-        transactions: [],
+        "transactions": [transaction],
     }
     return jsonify(data)
 
