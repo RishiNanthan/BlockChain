@@ -93,6 +93,14 @@ def create_address():
     return jsonify(data)
 
 
+@app.route("/get_client_transactions")                 # To be completed
+def get_client_transactions():
+    data = {
+        transactions: [],
+    }
+    return jsonify(data)
+
+
 
 def run_server():
     app.run(IP, PORT, debug=False)
