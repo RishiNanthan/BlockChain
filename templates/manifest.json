@@ -1,6 +1,6 @@
 {
-  "short_name": "Online Meeting",
-  "name": "online meetting application",
+  "short_name": "BlockChain",
+  "name": "Blockchain client",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
